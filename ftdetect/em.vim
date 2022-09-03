@@ -20,21 +20,18 @@
 "   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 "   OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-augroup filetypedetect
 autocmd! BufRead,BufNewFile *.em,*.empy call <SID>extension(expand('<afile>'))
-augroup END
 
 " Detect a normal or compound file extension (like 'foo.cpp.em')
 function! s:extension(fname)
 	noautocmd exe 'file ' .. fnamemodify(a:fname, ':r')
 	filetype detect
 
-	" Now that we have detected the parent file type we can append Jinja to it
+	" Now that we have detected the parent file type we can append empy to it
 	if empty(&filetype)
 		set filetype=em
 	elseif &filetype !~? 'em'
 		set filetype+=.em
 	endif
-
 	exe 'noautocmd file ' .. a:fname
 endfunction

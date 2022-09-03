@@ -32,16 +32,16 @@
 " The parameters will get adjusted to account for files which are too small.
 " This is because the function might get called by scripts that just assume a
 " certain minimal length.
-function! empy#DetectEmpy(first, last) abort
+function! em#DetectEmpy(first, last) abort
 	" How many lines to count, range takes precedence over default values
 	let l:first = min([a:first, line('$')])
 	let l:last  = min([a:last, line('$')])
-	let l:empy_pattern = 
-				\ '@\{.*\}|'.
-				\ '@\(.*\)|'.
-				\ '@?\S\+\n|'.
-				\ '@#.*\n'.
-				\ '@".*"'
+	let l:empy_pattern = '\v'.
+				\ '\@\{.*\}|'.
+				\ '\@\(.*\)|'.
+				\ '\@?\S\+\n|'.
+				\ '\@#.*\n'.
+				\ '\@".*"'
 	" Probe a number of lines for empy code, give up if none is found.
 	for l:line in range(l:first, l:last)
 		if getline(l:line) =~? l:empy_pattern
@@ -53,12 +53,11 @@ endfun
 
 " Appends '.empy' to the 'filetype' option if empy code has been detected in
 " the buffer.
-function! empy#AdjustFiletype() abort
-	echo "Detecting empy code..."
+function! em#AdjustFiletype() abort
 	if &filetype =~? 'empy'
 		return
 	endif
-	if empy#DetectEmpy(1,15)
-		execute 'set filetype+=.jinja'
+	if em#DetectEmpy(1,100)
+		execute 'set filetype+=.em'
 	endif
 endfun

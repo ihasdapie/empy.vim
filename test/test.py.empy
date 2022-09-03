@@ -46,3 +46,11 @@
 
 
 
+
+
+def foo(@{var_name}, @var2):
+    """ Multiline String """
+    @{
+        print('Hello @("world")')
+    }
+
